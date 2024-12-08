@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Login - Student Budget Saver</title>
+    <style>
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Login to Your Account</h1>
+            <p>Manage your finances smartly and effortlessly!</p>
+            <!-- Error message div -->
+            <div id="error-message" class="error-message">
+                {% if error_message %}
+                    {{ error_message }}
+                {% endif %}
+            </div>
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p class="login-link">Don't have an account? <a href="{% url 'create_account' %}">Create one here</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <Title>Student Saver - Savings</Title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="student_saver.css"> 
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+        #first_pie_chart, #second_pie_chart {
+            width: 400px;
+            height: 300px;
+        }
+        .second-chart-container {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<header>
+    <h1>Welcome to Your Savings Plan</h1>
+    <p>Use this page to calculate how much money you will have at the end of the month.</p>
+</header>
+
+<nav>
+    <a href="student_saver.html">Home</a>
+    <a href="about.html">About Us</a>
+    <a onclick="window.print()">Print this Page</a>
+</nav>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawInitialCharts);
+
+    function drawInitialCharts() {
+        drawFirstChart(0, []);
+        drawSecondChart(100, [50, 50]);
+    }
+
+    function drawFirstChart(totalIncome, subtractedValues) {
+        var remainingIncome = totalIncome - subtractedValues.reduce((a, b) => a + b.value, 0);
+        remainingIncome = remainingIncome > 0 ? remainingIncome : 0;
+
+        var dataArray = [['Category', 'Value']];
+        dataArray.push(['Remaining Income', remainingIncome]);
+        subtractedValues.forEach((item, index) => {
+            dataArray.push([item.name || 'Subtracted ' + (index + 1), item.value]);
+        });
+
+        var data = google.visualization.arrayToDataTable(dataArray);
+
+        var options = {
+            title: 'First Pie Chart',
+            is3D: true
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('first_pie_chart'));
+        chart.draw(data, options);
+    }
+
+    function drawSecondChart(remaining, percentages) {
+        var data = google.visualization.arrayToDataTable([
+            ['Category', 'Value'],
+            ['Saved Money', (remaining * percentages[0]) / 100],
+            ['Spending Money', (remaining * percentages[1]) / 100]
+        ]);
+
+        var options = {
+            title: 'Second Pie Chart',
+            is3D: true
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('second_pie_chart'));
+        chart.draw(data, options);
+    }
+
+    function updateCharts() {
+        var totalIncome = parseFloat(document.getElementById('input_value').value) || 0;
+        var subtractedValues = Array.from(document.getElementsByClassName('subtracted_field')).map(input => {
+            return {
+                name: input.querySelector('.subtract_name').value,
+                value: parseFloat(input.querySelector('.subtract_value').value) || 0
+            };
+        });
+        var remainder = totalIncome - subtractedValues.reduce((a, b) => a + b.value, 0);
+        remainder = remainder > 0 ? remainder : 0;
+
+        drawFirstChart(totalIncome, subtractedValues);
+
+        var percentage1 = parseFloat(document.getElementById('percentage1').value) || 0;
+        var percentage2 = 100 - percentage1;
+
+        drawSecondChart(remainder, [percentage1, percentage2]);
+
+        calculatePaymentPlan();  // Update payment plan
+    }
+
+    function addSubtractedField() {
+        var container = document.getElementById('subtracted_fields');
+        var newField = document.createElement('div');
+        newField.className = 'subtracted_field';
+        newField.innerHTML = '<label>Name: </label><input type="text" class="subtract_name" value=""><label> Subtract Value: </label><input class="subtract_value" step="0.01" value="0" oninput="updateCharts()">';
+        container.appendChild(newField);
+    }
+
+    function calculatePaymentPlan() {
+        var goalAmount = parseFloat(document.getElementById('goal_amount').value) || 0;
+        var months = parseInt(document.getElementById('goal_months').value) || 0;
+        
+        // Get the amount the user is willing to save per month
+        var percentage1 = parseFloat(document.getElementById('percentage1').value) || 0;
+        var totalIncome = parseFloat(document.getElementById('input_value').value) || 0;
+        var subtractedValues = Array.from(document.getElementsByClassName('subtracted_field')).map(input => {
+            return {
+                name: input.querySelector('.subtract_name').value,
+                value: parseFloat(input.querySelector('.subtract_value').value) || 0
+            };
+        });
+        var remainder = totalIncome - subtractedValues.reduce((a, b) => a + b.value, 0);
+        remainder = remainder > 0 ? remainder : 0;
+        
+        var amountToSave = (remainder * percentage1) / 100;
+
+        // Calculate how long it will take to reach the goal if they save this amount per month
+        var monthsToGoal = goalAmount / amountToSave;
+
+        // Update the payment plan display
+        var paymentPlanText = `You will need to save $${amountToSave.toFixed(2)} per month to reach your goal of $${goalAmount.toFixed(2)}. `;
+        if (months > 0) {
+            paymentPlanText += `It will take approximately ${monthsToGoal.toFixed(1)} months to reach your goal.`;
+        }
+
+        document.getElementById('payment_plan').innerText = paymentPlanText;
+    }
+</script>
+
+</head>
+<body>
+    
+    <div>
+        <label for="input_value">Income: </label>
+        <input id="input_value" step="0.01" value="" oninput="updateCharts()">
+        <br>
+        <div id="subtracted_fields">
+            <div class="subtracted_field">
+                <label>Name: </label>
+                <input type="text" class="subtract_name" value="">
+                <label> Subtract Value: </label>
+                <input class="subtract_value" step="0.01" value="" oninput="updateCharts()">
+
+                <label for="percentage1">Percentage You Would Like to Save (0-100): </label>
+                <input id="percentage1" step="0.01" value="" oninput="updateCharts()">
+            </div>
+        </div>
+        <button onclick="addSubtractedField()">Add Subtracted Value</button>
+    </div>
+
+    <!-- Add goal and savings inputs -->
+    <div>
+        <label for="goal_amount">Savings Goal: </label>
+        <input id="goal_amount" step="0.01" value="" oninput="calculatePaymentPlan()">
+
+        <label for="goal_months">Months to Achieve Goal: </label>
+        <input id="goal_months" type="number" value="" oninput="calculatePaymentPlan()">
+    </div>
+
+    <!-- Display the payment plan -->
+    <div id="payment_plan"></div>
+
+    <div class="container">
+        <div id="first_pie_chart"></div>
+
+        <div class="second-chart-container">
+            <div id="second_pie_chart"></div>
+        </div>
+    </div>
+</body>
+</html>

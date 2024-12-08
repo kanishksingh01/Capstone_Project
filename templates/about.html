@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Student Finance Assistance</title>
+    <link rel="stylesheet" href="{% static 'about.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <header>
+        <h1>About Us</h1>
+    </header>
+    <nav class="nav justify-content-center">
+        <a class="nav-link" href="{% url 'index' %}">Home</a>
+        <a class="nav-link" href="{% url 'about' %}">About Us</a>
+    </nav>
+    <main class="about-container"> <!-- Add a class for centering -->
+        <section class="about-intro">
+            <img src="{% static 'photos/group.jpg' %}" >
+             <!-- Update with your image path -->
+            <p>We are all senior IT students at the University of Massachusetts Boston. In our free time, we enjoy a multitude of different activities.
+                When we were discussing what ideas to come up with for our senior project we noted that keeping track of finances was difficult.
+                At one point or another, all of us wondered how much money we had to spend on personal expenses after paying for the necessities such as tuition, rent, car payments, and others. And thus the idea for the "Student Saver" was born. </p>
+        </section>
+        <section>
+            <h2>Welcome to Student Finance Assistance</h2>
+            <p>
+                Our mission is to empower students by providing them with the tools and knowledge they need to manage their finances effectively. We understand that navigating financial challenges while pursuing education can be overwhelming. That's why we are dedicated to offering resources that simplify budgeting, saving, and tuitions.
+            </p>
+        </section>
+        <section>
+            <h2>What We Offer</h2>
+            <ul>
+                <li><strong>Budgeting Tools:</strong> Create and manage your budget with our user-friendly templates and plans.</li>
+                <li><strong>Financial Literacy Resources:</strong> Access articles and guides to help you understand key financial concepts.</li>
+                <li><strong>Pre-Planned Goals:</strong> Choose from a variety of plans based on your specific goals.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Our Vision</h2>
+            <p>
+                We want to provide a tool for students to responsbily manage their finances.. By providing the right resources and support, we aim to alleviate financial stress and help students focus on their education and future careers as well as improving their financial literacy.
+            </p>
+        </section>
+        <section>
+            <h2>Join Us!</h2>
+            <p>
+                Whether you're a high school student preparing for college or a current college student seeking to improve your financial situation, we invite you to explore our website and let us help you achieve your goals.
+        </section>
+    </main>
+    <footer>
+    </footer>
+</body>
+</html>

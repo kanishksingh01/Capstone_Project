@@ -1,0 +1,141 @@
+:root {
+    --dark-green: #064e3b;
+    --medium-green: #065f46;
+    --light-green: #059669;
+    --hover-green: #047857;
+}
+  
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--dark-green) 0%, var(--medium-green) 100%);
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    padding: 2rem;
+}
+
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--dark-green);
+}
+
+p {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--medium-green);
+}
+
+.form-container {
+    padding: 1rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--dark-green);
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="text"][name="first-name"],
+input[type="text"][name="last-name"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: var(--medium-green);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1);
+    background-color: white;
+}
+
+input:hover {
+    border-color: var(--light-green);
+    background-color: white;
+}
+
+.btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--medium-green) 0%, var(--dark-green) 100%);
+    color: #ffffff;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, var(--light-green) 0%, var(--medium-green) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.login-link a {
+    color: var(--medium-green);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+    color: var(--dark-green);
+    text-decoration: underline;
+}
+
+.error-message {
+    display: none;
+    color: #dc2626;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.error-message:not(:empty) {
+    display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

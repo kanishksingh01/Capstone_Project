@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>Student Saver - Goal Plan</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'p2styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'script2.js' %}"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logon_name text-right">
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.username }}!</p>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                </form>
+            {% else %}
+                <p>Welcome, Guest!</p>
+            {% endif %}
+        </div>
+        <h1>Goal Plan</h1>
+        <p>Use this page to plan your goals.</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav justify-content-center">
+        <a class="nav-link" href="{% url 'index' %}">Home</a>
+        <a class="nav-link" href="{% url 'about' %}">About Us</a>
+        <a class="nav-link" onclick="window.print()">Print this Page</a>
+    </nav>
+
+    <!-- Save Data Button at Top Right -->
+    <div class="text-right mt-4 mr-4">
+        <button type="button" class="btn btn-primary" onclick="submitForm()">Save Data</button>
+    </div>
+
+    <!-- Income Section -->
+    <form id="plan2Form" action="{% url 'save_goal_plan_data' %}" method="post">
+        {% csrf_token %}
+        <div>
+            <label for="input_value">Income: 
+                <span class="tooltip-question" data-toggle="tooltip" title="Enter your total income for the month.">?</span>
+            </label>
+            <input id="input_value" name="total_income" type="number" step="0.01" placeholder="Enter your income" oninput="updateCharts()">
+            <label>
+                <input type="radio" name="income_frequency" value="annual" checked onchange="updateCharts()"> Annual
+                <span class="tooltip-question" data-toggle="tooltip" title="Select if your income is annual.">?</span>
+            </label>
+            <label>
+                <input type="radio" name="income_frequency" value="monthly" onchange="updateCharts()"> Monthly
+                <span class="tooltip-question" data-toggle="tooltip" title="Select if your income is monthly.">?</span>
+            </label>
+            <br>
+
+            <!-- Costs Section -->
+            <div id="subtracted_fields">
+                <div class="subtracted_field">
+                    <label>Name: 
+                        <span class="tooltip-question" data-toggle="tooltip" title="Enter the name of the cost.">?</span>
+                    </label>
+                    <input type="text" class="cost_name" placeholder="Enter cost name">
+                    <label> Cost: 
+                        <span class="tooltip-question" data-toggle="tooltip" title="Enter the amount of the cost.">?</span>
+                    </label>
+                    <input class="cost_value" type="number" step="0.01" placeholder="Enter cost amount" oninput="updateCharts()">
+                    <label>
+                        <input type="radio" name="cost_frequency_0" value="annual" checked onchange="updateCharts()"> Annual
+                        <span class="tooltip-question" data-toggle="tooltip" title="Select if the cost is annual.">?</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="cost_frequency_0" value="monthly" onchange="updateCharts()"> Monthly
+                        <span class="tooltip-question" data-toggle="tooltip" title="Select if the cost is monthly.">?</span>
+                    </label>
+                    <label for="percentage1">Percentage towards goal (0-100): </label>
+                    <input id="percentage1" name="goal_percentage" type="number" step="0.01" placeholder="Enter percentage" oninput="updateCharts()">
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addSubtractedField()">Add Expense</button>
+            <div id="error_message" class="error-message"></div>
+
+            <!-- Savings Goal -->
+            <div>
+                <label for="goal_amount">Savings Goal: </label>
+                <input id="goal_amount" type="number" step="0.01" placeholder="Enter your savings goal" oninput="calculatePaymentPlan()">
+            </div>
+
+            <!-- Charts and Text -->
+            <div class="container">
+                <p id="remaining_income_text"></p>
+                <p id="monthly_savings_text"></p>
+                <p id="payment_plan"></p>
+                <div id="first_pie_chart"></div>
+                <div id="second_pie_chart"></div>
+            </div>
+        </div>
+
+        <!-- Hidden Form for Database Integration -->
+        <input type="hidden" id="total_income" name="total_income">
+        <input type="hidden" id="subtracted_values" name="subtracted_values">
+        <input type="hidden" id="remaining_income" name="remaining_income">
+        <input type="hidden" id="savings_goal" name="savings_goal">
+        <input type="hidden" id="goal_percentage" name="goal_percentage"> <!-- New hidden field -->
+    </form>
+    
+    <table id="savedDataTable" class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Total Income</th>
+                <th>Subtracted Values</th>
+                <th>Remaining Income</th>
+                <th>Savings Goal</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here -->
+        </tbody>
+    </table>
+    
+    
+    
+</body>
+</html>

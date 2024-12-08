@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Student Saver</title>
+    
+    <!--
+        Student Saver main web page
+        Filename: student_saver.html
+    -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'student_saver.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+    <header>
+        <div class="logon_name" align="right">
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.username }}!</p>
+                <!-- Logout Form -->
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Logout</button>
+                </form>
+            {% else %}
+                <p>Welcome, Guest!</p>
+            {% endif %}
+        </div>
+        <h1>Welcome to Student Saver</h1>
+        <p>Your reliable solution for navigating your personal finances as a student!</p>
+    </header>
+    <nav class="nav justify-content-center">
+        <a class="nav-link" href="{% url 'index' %}">Home</a>
+        <a class="nav-link" href="{% url 'about' %}">About Us</a>
+        {% if not user.is_authenticated %}
+        <a class="nav-link" href="{% url 'login' %}">Login</a>
+    {% endif %}
+    </nav>
+
+    <div class="container">
+        <h2>Explore the Features of Student Saver</h2>
+        <p>Making finances as a student easier and more efficient.</p>
+
+        <div class="features">
+            {% if user.is_authenticated %}
+            <div class="feature-box" data-tooltip="A basic plan to help you start saving effectively">
+                <h3>Savings Plan</h3>
+                <button class="cta-button" onclick="window.location.href='{% url 'plan1' %}'">Get Started</button>       
+            </div>
+            <div class="feature-box" data-tooltip="A plan to help you set and achieve your financial goals">
+                <h3>Goal Plan</h3>
+                <button class="cta-button" onclick="document.location = '{% url 'plan2' %}'">Get started</button>
+            {% else %}
+                <div class="feature-box" data-tooltip="A basic plan to help you start saving effectively">
+                    <h3>Savings Plan</h3>
+                    <p class="warning">Login to access</p>
+                </div>
+                <div class="feature-box" data-tooltip="A plan to help you set and achieve your financial goals">
+                    <h3>Goal Plan</h3>
+                    <p class="warning">Login to access</p>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        
+    </footer>
+
+</body>
+</html>
