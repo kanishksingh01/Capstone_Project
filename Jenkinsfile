@@ -1,12 +1,12 @@
 pipeline {
-    agent any
-
+ agent {
+        label 'slave3'
+    }
     stages {
         stage('Clone GitHub Repository') {
             steps {
                 script {
-                    sh 'git clone https://github.com/kanishksingh01/Capstone_Project.git'
-                    sh 'cd your-project'
+                    sh 'cd /home/ec2-user/workspace/mycapstonepipeline/Capstone_Project'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'source venv/bin/activate && pip install django'
+                    sh 'pip install django'
                 }
             }
         }
@@ -32,23 +32,11 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    source venv/bin/activate
-                    python manage.py collectstatic --noinput
-                    python manage.py makemigrations
-                    python manage.py migrate
-                    python manage.py runserver 0.0.0.0:8000 
-                    '''
-                }
-            }
-        }
-
-        stage('Run Node.js Application') {
-            steps {
-                script {
-                    sh '''
-                    cd your-project
-                    npm install
-                    npm start &
+                    cd /home/ec2-user/workspace/mycapstonepipeline/Capstone_Project
+                    python3 manage.py collectstatic --noinput
+                    python3 manage.py makemigrations
+                    python3 manage.py migrate
+                    python3 manage.py runserver 127.16.0.0:8000 
                     '''
                 }
             }
